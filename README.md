@@ -1,2 +1,0 @@
-# Trabalho - Estrutura de Dados
-
