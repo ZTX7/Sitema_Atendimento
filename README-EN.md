@@ -53,7 +53,7 @@ Follow these steps to generate the executable and run the project:
 * Run the following command to compile the code and generate the main.exe file in the build folder:
 
 ```
-g++ (Get-ChildItem source\*.cpp) -Iinclude -o build\main.exe
+g++ (Get-ChildItem source\*.c) -Iinclude -o build\main.exe
 ```
 After the command is executed, the main.exe file will be available in the build folder.
 
