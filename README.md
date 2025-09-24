@@ -16,15 +16,15 @@ O proposito visa o aprendizado de algoritimos e estruturas complexas no cotidian
   <tbody>
     <tr>
       <td>Sinézio da Silva Ramos Junior</td>
-      <td>202302375081</td>
+      <td>2023-----081</td>
     </tr>
     <tr>
       <td>Paulo Henrique R. Chaves</td>
       <td>2023-----308</td>
     </tr>
     <tr>
-      <td>Fulano de tal</td>
-      <td>Matricula do fulano</td>
+      <td>Erick Mota Macedo da Silva</td>
+      <td>2025-----701</td>
     </tr>
   </tbody>
 </table>
