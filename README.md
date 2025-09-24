@@ -19,8 +19,12 @@ O proposito visa o aprendizado de algoritimos e estruturas complexas no cotidian
       <td>202302375081</td>
     </tr>
     <tr>
+      <td>Erick Mota Macedo da Silva</td>
+      <td>202503032701</td>
+    </tr>
+    <tr>
       <td>Fulano de tal</td>
-      <td>Matricula do fulano</td>
+      <td>Matricula de fulano</td>
     </tr>
   </tbody>
 </table>
