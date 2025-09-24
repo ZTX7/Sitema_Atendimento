@@ -37,8 +37,11 @@ void menu(){
                 break;
             
             case 2:
+
             case 3:
+            
             case 4:
+            
                 menu();
                 break;
 

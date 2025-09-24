@@ -9,12 +9,19 @@ void limpar_buffer() {
 
 void cadastrar_pacientes(){
 	
-	int idade, cpf, prioridade, condition;
+	int idade, cpf, condition, prioridade, condition;
 	char nome[50];
+	int count = 0;
 
 	printf("\n\n~~~~~~~~ Cadastrar Paciente ~~~~~~~~\n");
 
 	limpar_buffer();
+	
+
+	while (int condition != 2)
+	{
+		/* code */
+	}
 	
 	printf("Digite o nome do paciente:\n");
 	fgets(nome, sizeof(nome), stdin);	
