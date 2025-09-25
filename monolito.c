@@ -60,9 +60,11 @@ Paciente *inserirElementoComeco(Paciente *inicio, char nome[], int idade, char c
 void menu(){
     printf("\n\n~~~~~~~~~ MENU ~~~~~~~~~\n\n");
     printf("(1). Cadastrar Paciente.\n");
-    printf("(2). Fila de Atendimento.\n");
-    printf("(3). Historico de atendimento.\n");
-    printf("(4). Sair.\n");
+    printf("(2). Buscar Paciente.\n");
+    printf("(4). Pacientes Cadastrados.\n");
+    printf("(5). Fila de Atendimento.\n");
+    printf("(6). Historico de atendimento.\n");
+    printf("(7). Sair.\n");
     printf("\nSelecione a opcao para continuar: ");
 }
 
@@ -76,7 +78,9 @@ Paciente*cadastrar(Paciente *lista){
 
     while (option != 2){
 
-        printf("\n\n~~~~~~~~~ CADASTRANDO PACIENTE ~~~~~~~~~\n\n");
+        printf("\n\n~~~~~~~~~ CADASTRANDO PACIENTE ~~~~~~~~~\n\n"); 
+
+
 
         printf("Digite o nome: ");
         fgets(nome, 51, stdin);
@@ -89,18 +93,22 @@ Paciente*cadastrar(Paciente *lista){
         printf("Digite o CPF (11 digitos): ");
         fgets(cpf, 12, stdin);
         cpf[strcspn(cpf, "\n")] = 0;
+        
         if (strlen(cpf) != 11){
             printf("\nERRO: O CPF deve ter 11 digitos. Cadastro cancelado.\n");
             return lista;
         }
-
+        
         lista = inserirElementoComeco(lista, nome, idade, cpf);
         printf("\nPaciente cadastrado com sucesso!\n");
 
 
         printf("\nDeseja cadastrar outro paciente?\n");
-        printf("(1). Sim -- (2). Não\n");
+        printf("(1). Sim -- (2). Não");
         scanf("%d", &option);
+        while (getchar() != '\n');
+
+
     };
 
     return lista;
@@ -114,7 +122,7 @@ void visualizarPacientes(Paciente *inicio){
         return;
     }
     else{
-        printf("\n\n~~~~~~~~~ FILA DE ATENDIMENTO ~~~~~~~~~\n\n");
+        printf("\n\n~~~~~~~~~ PACIENTES CADASTRADOS ~~~~~~~~~\n\n");
         Paciente *temp = inicio;
         int i = 1;
         while (temp != NULL){
@@ -129,6 +137,48 @@ void visualizarPacientes(Paciente *inicio){
         printf("\n-----------------------------");
     }
 }
+
+
+Paciente *buscarPaciente(Paciente *inicio){
+
+    char busca[12];
+    int i = 1;
+    printf("\n\n~~~~~~~~~ BUSCAR PACIENTE ~~~~~~~~~\n\n");
+
+    if (listaVazia(inicio)){
+        printf("\n\n----------------------------");
+        printf("\n\nPaciente não Cadastrado...\n");
+        printf("\n-----------------------------");
+        return NULL;
+    }
+
+    Paciente *temp = inicio;
+    
+    printf("Digite o CPF do paciente que deseja buscar: ");
+    fgets(busca, 12, stdin);
+    busca[strcspn(busca, "\n")] = 0;
+
+    while (temp != NULL){
+        if (strcmp(temp->CPF, busca) == 0){
+            
+            printf("\n--- Paciente %d ---\n", i);
+            printf("Nome: %s\n", temp->nome);
+            printf("Idade: %d\n", temp->idade);
+            printf("CPF: %s\n", temp->CPF);
+            printf("Prioridade: %s\n", temp->prioridade ? "Sim" : "Nao");
+
+            break;
+        };
+            i++;
+            temp = temp->prox;
+    }
+    if (temp == NULL){
+        printf("\nPaciente com CPF %s nao encontrado.\n", busca);
+    }
+
+
+}
+
 
 //---------------------------------------------------------------
 //                        CHAMADAS
@@ -149,12 +199,18 @@ void iniciarSistema(){
             listaDePacientes = cadastrar(listaDePacientes);
             break;
         case 2:
-            visualizarPacientes(listaDePacientes);
+            buscarPaciente(listaDePacientes); 
             break;
         case 3:
-            printf("\n\n~~~~~~~~~ HISTORICO DE ATENDIMENTO ~~~~~~~~~\n\n");
+            visualizarPacientes(listaDePacientes);
             break;
         case 4:
+            
+            break;
+        case 5:
+            printf("\n\n~~~~~~~~~ HISTORICO DE ATENDIMENTO ~~~~~~~~~\n\n");
+            break;
+        case 6:
             printf("\nSaindo do programa...\n");
             break;
         default:
