@@ -17,16 +17,19 @@ void iniciarSistema(){
             visualizarPacientes(listaDePacientes);
             break;
         case 3:
-            printf("\n\n~~~~~~~~~ HISTORICO DE ATENDIMENTO ~~~~~~~~~\n\n");
+            buscarCpf(listaDePacientes);
             break;
         case 4:
+            printf("\nHistorico de atendimento.\n");
+            break;    
+        case 5:
             printf("\nSaindo do programa...\n");
             break;
         default:
             printf("\nOpcao invalida. Por favor, selecione uma opcao de 1 a 4.\n");
             break;
         }
-    } while (option != 4);
+    } while (option != 5);
 }
 
 int main(){   

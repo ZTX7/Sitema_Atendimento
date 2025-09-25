@@ -3,14 +3,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <string.h>
 
 typedef struct paciente{
     char nome[51];
     int idade;
     char CPF[12];
-    bool prioridade;
+    char prioridade[4];
 
     struct paciente *prox;
 } Paciente;

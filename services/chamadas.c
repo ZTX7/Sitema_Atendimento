@@ -4,8 +4,9 @@ void menu(){
     printf("\n\n~~~~~~~~~ MENU ~~~~~~~~~\n\n");
     printf("(1). Cadastrar Paciente.\n");
     printf("(2). Fila de Atendimento.\n");
-    printf("(3). Historico de atendimento.\n");
-    printf("(4). Sair.\n");
+    printf("(3). Buscar por CPF.\n");
+    printf("(4). Historico de atendimento.\n");
+    printf("(5). Sair.\n");
     printf("\nSelecione a opcao para continuar: ");
 }
 
@@ -21,8 +22,7 @@ Paciente*cadastrar(Paciente *lista){
 
     printf("Digite a idade: ");
     scanf("%d", &idade);
-    while (getchar() != '\n')
-        ;
+    while (getchar() != '\n');
 
     printf("Digite o CPF (11 digitos): ");
     fgets(cpf, 12, stdin);
@@ -45,7 +45,7 @@ void visualizarPacientes(Paciente *inicio){
         return;
     }
     else{
-        printf("\n\n~~~~~~~~~ FILA DE ATENDIMENTO ~~~~~~~~~\n\n");
+        printf("\n\n~~~~~~~~~ lista de pacientes ~~~~~~~~~\n\n");
         Paciente *temp = inicio;
         int i = 1;
         while (temp != NULL){
@@ -53,10 +53,40 @@ void visualizarPacientes(Paciente *inicio){
             printf("Nome: %s\n", temp->nome);
             printf("Idade: %d\n", temp->idade);
             printf("CPF: %s\n", temp->CPF);
-            printf("Prioridade: %s\n", temp->prioridade ? "Sim" : "Nao");
+            printf("Prioridade: %s\n", temp->prioridade);
             temp = temp->prox;
             i++;
         }
         printf("\n-----------------------------");
     }
+}
+
+Paciente* buscarCpf(Paciente*inicio){
+    char buscacpf[12];
+
+    printf("\n\n~~~~~~~~~ BUSCAR POR CPF ~~~~~~~~~\n\n");
+    printf("Digite o CPF (11 digitos): ");
+    fgets(buscacpf, 12, stdin);
+    buscacpf[strcspn(buscacpf, "\n")] = 0;
+
+    if (strlen(buscacpf) != 11){
+        printf("\nERRO: O CPF deve ter 11 digitos. Busca cancelada.\n");
+    }
+
+    Paciente *temp = inicio;
+    while (temp != NULL) {
+        if (strcmp(temp->CPF, buscacpf) == 0) {
+            
+            printf("\nPaciente %s:\n", temp->CPF);
+            printf("Nome: %s\n", temp->nome);
+            printf("Idade: %d\n", temp->idade);
+            printf("Prioridade: %s\n", temp->prioridade);
+            
+            return temp;
+        }
+        temp = temp->prox;
+    }
+    
+    printf("\nPaciente %s nao encontrado, CPF não existente.\n", buscacpf);
+    return NULL;
 }

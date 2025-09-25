@@ -11,33 +11,34 @@ typedef struct paciente{
     char nome[51];
     int idade;
     char CPF[12];
-    bool prioridade;
+    char prioridade[4];
+
     struct paciente *prox;
 } Paciente;
 
-int listaVazia(Paciente *inicio){
-    return inicio == NULL;
-}
-
-Paciente *criarNo(char nome[], int idade, char cpf[]){
-    Paciente *novoNo = (Paciente *)malloc(sizeof(Paciente));
+Paciente* criarNo(char nome[], int idade, char cpf[]){
+    Paciente* novoNo = (Paciente*)malloc(sizeof(Paciente));
 
     strcpy(novoNo->nome, nome);
     novoNo->idade = idade;
     strcpy(novoNo->CPF, cpf);
     if (idade >= 50) {
-        novoNo->prioridade = true;
+        strcpy(novoNo->prioridade, "Sim");
     } else {
-        novoNo->prioridade = false;
+        strcpy(novoNo->prioridade, "Nao");
     }
-
+    
     novoNo->prox = NULL;
     return novoNo;
 }
 
-Paciente *inserirElementoComeco(Paciente *inicio, char nome[], int idade, char cpf[]){
-    Paciente *novoNo = criarNo(nome, idade, cpf);
-    novoNo->prox = inicio;
+int listaVazia(Paciente *lista) {
+    return lista == NULL;
+}
+
+Paciente* inserirElementoComeco(Paciente* lista, char nome[], int idade, char cpf[]){
+    Paciente* novoNo = criarNo(nome, idade, cpf);
+    novoNo->prox = lista;
     return novoNo;
 }
 //---------------------------------------------------------------
@@ -45,10 +46,11 @@ Paciente *inserirElementoComeco(Paciente *inicio, char nome[], int idade, char c
 //---------------------------------------------------------------
 
 
-
-
-
-
+typedef struct {
+    Paciente *inicio; 
+    Paciente *fim;   
+    int tamanho;
+} Fila;
 
 
 //---------------------------------------------------------------
@@ -58,9 +60,11 @@ Paciente *inserirElementoComeco(Paciente *inicio, char nome[], int idade, char c
 void menu(){
     printf("\n\n~~~~~~~~~ MENU ~~~~~~~~~\n\n");
     printf("(1). Cadastrar Paciente.\n");
-    printf("(2). Fila de Atendimento.\n");
-    printf("(3). Historico de atendimento.\n");
-    printf("(4). Sair.\n");
+    printf("(2). Pacientes Cadastrados.\n");
+    printf("(3). Buscar por CPF.\n");
+    printf("(4). Mostrar fila de atendimento.\n");
+    printf("(5). Historico de atendimento.\n");
+    printf("(6). Sair.\n");
     printf("\nSelecione a opcao para continuar: ");
 }
 
@@ -76,8 +80,7 @@ Paciente*cadastrar(Paciente *lista){
 
     printf("Digite a idade: ");
     scanf("%d", &idade);
-    while (getchar() != '\n')
-        ;
+    while (getchar() != '\n');
 
     printf("Digite o CPF (11 digitos): ");
     fgets(cpf, 12, stdin);
@@ -92,28 +95,59 @@ Paciente*cadastrar(Paciente *lista){
     return lista;
 }
 
-void visualizarPacientes(Paciente *inicio){
-    if (listaVazia(inicio)){
+void visualizarPacientes(Paciente *lista){
+    if (listaVazia(lista)){
         printf("\n\n----------------------------");
         printf("\n\nNao ha pacientes cadastrados.\n");
         printf("\n-----------------------------");
         return;
     }
     else{
-        printf("\n\n~~~~~~~~~ FILA DE ATENDIMENTO ~~~~~~~~~\n\n");
-        Paciente *temp = inicio;
+        printf("\n\n~~~~~~~~~ PACIENTES CADASTRADOS ~~~~~~~~~\n\n");
+        Paciente *temp = lista;
         int i = 1;
         while (temp != NULL){
             printf("\n--- Paciente %d ---\n", i);
             printf("Nome: %s\n", temp->nome);
             printf("Idade: %d\n", temp->idade);
             printf("CPF: %s\n", temp->CPF);
-            printf("Prioridade: %s\n", temp->prioridade ? "Sim" : "Nao");
+            printf("Prioridade: %s\n", temp->prioridade);
             temp = temp->prox;
             i++;
         }
         printf("\n-----------------------------");
     }
+}
+
+Paciente* buscarCpf(Paciente*lista){
+    char buscacpf[12];
+
+    printf("\n\n~~~~~~~~~ BUSCAR POR CPF ~~~~~~~~~\n\n");
+    printf("Digite o CPF (11 digitos): ");
+    fgets(buscacpf, 12, stdin);
+    buscacpf[strcspn(buscacpf, "\n")] = 0;
+
+    if (strlen(buscacpf) != 11){
+        printf("\nERRO: O CPF deve ter 11 digitos. Busca cancelada.\n");
+    }
+
+    Paciente *temp = lista;
+    while (temp != NULL) {
+        if (strcmp(temp->CPF, buscacpf) == 0) {
+            
+            printf("\nPaciente %s:\n", temp->CPF);
+            printf("Nome: %s\n", temp->nome);
+            printf("Idade: %d\n", temp->idade);
+            printf("Prioridade: %s\n", temp->prioridade);
+            
+            return temp;
+        }
+        temp = temp->prox;
+    }
+    
+    printf("\nPaciente %s nao encontrado, CPF não existente.\n", buscacpf);
+    printf("\n-----------------------------");
+    return NULL;
 }
 
 //---------------------------------------------------------------
@@ -127,27 +161,56 @@ void iniciarSistema(){
     do{
         menu();
         scanf("%d", &option);
-
         while (getchar() != '\n');
 
         switch (option){
         case 1:
             listaDePacientes = cadastrar(listaDePacientes);
+            // Adicionar o paciente para a fila de atendimento e de acordo com a prioridade
             break;
         case 2:
             visualizarPacientes(listaDePacientes);
             break;
         case 3:
-            printf("\n\n~~~~~~~~~ HISTORICO DE ATENDIMENTO ~~~~~~~~~\n\n");
+            buscarCpf(listaDePacientes);
             break;
         case 4:
+            printf("\n~~~~~~~~~ FILA DE ATENDIMENTO ~~~~~~~~~.\n");
+            int yes;
+            do{
+                printf("\nDeseja chamar proximo atendimento? ");
+                printf("\n(1). Sim\n");
+                printf("(2). Nao\n");
+                printf("\nSelecione a opcao para continuar: ");
+                scanf("%d", &yes);
+                while (getchar() != '\n');
+
+                switch (yes){
+                case 1:
+                    printf("\nPaciente chamado\n");
+                    break;
+                case 2:
+                    printf("\nSaindo da fila de atendimento...\n");
+                    break;
+                default:
+                    printf("\nOpcao invalida.\n");
+                    break;
+                }
+            }while(yes!=2);
+            
+            printf("\n-----------------------------");
+            break; 
+        case 5:
+            printf("\nHistorico de atendimento.\n");
+            break;    
+        case 6:
             printf("\nSaindo do programa...\n");
             break;
         default:
             printf("\nOpcao invalida. Por favor, selecione uma opcao de 1 a 4.\n");
             break;
         }
-    } while (option != 4);
+    } while (option != 6);
 }
 
 int main(){   

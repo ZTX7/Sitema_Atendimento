@@ -6,5 +6,6 @@
 void menu();
 Paciente* cadastrar(Paciente *lista);
 void visualizarPacientes(Paciente *inicio);
+Paciente* buscarCpf(Paciente* inicio);
 
 #endif

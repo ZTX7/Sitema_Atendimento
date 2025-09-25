@@ -1,9 +1,5 @@
 #include "../include/lista_encadeada.h"
 
-int listaVazia(Paciente* inicio){
-    return inicio == NULL;
-}
-
 Paciente* criarNo(char nome[], int idade, char cpf[]){
     Paciente* novoNo = (Paciente*)malloc(sizeof(Paciente));
 
@@ -11,13 +7,17 @@ Paciente* criarNo(char nome[], int idade, char cpf[]){
     novoNo->idade = idade;
     strcpy(novoNo->CPF, cpf);
     if (idade >= 50) {
-        novoNo->prioridade = true;
+        strcpy(novoNo->prioridade, "Sim");
     } else {
-        novoNo->prioridade = false;
+        strcpy(novoNo->prioridade, "Nao");
     }
     
     novoNo->prox = NULL;
     return novoNo;
+}
+
+int listaVazia(Paciente *inicio) {
+    return inicio == NULL;
 }
 
 Paciente* inserirElementoComeco(Paciente* inicio, char nome[], int idade, char cpf[]){
