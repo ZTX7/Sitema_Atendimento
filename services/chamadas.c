@@ -1,20 +1,26 @@
 #include "chamadas.h"
 
 void menu(){
-    printf("\n\n~~~~~~~~~ MENU ~~~~~~~~~\n\n");
+    printf("\n\n_________________ MENU _________________\n");
     printf("(1). Cadastrar Paciente.\n");
-    printf("(2). Fila de Atendimento.\n");
+    printf("(2). Pacientes Cadastrados.\n");
     printf("(3). Buscar por CPF.\n");
-    printf("(4). Historico de atendimento.\n");
-    printf("(5). Sair.\n");
+    printf("(4). Mostrar fila de atendimento.\n");
+    printf("(5). Historico de atendimento.\n");
+    printf("(6). Sair.\n");
     printf("\nSelecione a opcao para continuar: ");
 }
 
-Paciente*cadastrar(Paciente *lista){
-    printf("\n\n~~~~~~~~~ CADASTRANDO PACIENTE ~~~~~~~~~\n\n");
+Paciente*cadastrar(Paciente *lista, FilaDuplaPrioridade** gerenciadorFila){
+    printf("\n\n~~~~~~~~~~ CADASTRANDO PACIENTE ~~~~~~~~~~\n\n");
+    
     char nome[51];
     int idade;
     char cpf[12];
+
+    if (*gerenciadorFila == NULL) {
+        *gerenciadorFila = criarFilaDupla();
+    }
 
     printf("Digite o nome: ");
     fgets(nome, 51, stdin);
@@ -33,51 +39,43 @@ Paciente*cadastrar(Paciente *lista){
     }
 
     lista = inserirElementoComeco(lista, nome, idade, cpf);
-    printf("\nPaciente cadastrado com sucesso!\n");
+    EnfileirarDuplo(*gerenciadorFila, nome, idade, cpf); 
+
+    printf("\n> Paciente cadastrado com sucesso!\n");
     return lista;
 }
 
-void visualizarPacientes(Paciente *inicio){
-    if (listaVazia(inicio)){
-        printf("\n\n----------------------------");
-        printf("\n\nNao ha pacientes cadastrados.\n");
-        printf("\n-----------------------------");
+void visualizarPacientes(Paciente *lista){
+    printf("\n\n~~~~~~~~~ PACIENTES CADASTRADOS ~~~~~~~~~\n\n");
+    if (listaVazia(lista)){
+        printf("> Nao ha pacientes cadastrados\n");
         return;
     }
     else{
-        printf("\n\n~~~~~~~~~ lista de pacientes ~~~~~~~~~\n\n");
-        Paciente *temp = inicio;
-        int i = 1;
+        Paciente *temp = lista;
         while (temp != NULL){
-            printf("\n--- Paciente %d ---\n", i);
-            printf("Nome: %s\n", temp->nome);
+            printf("\n--- %s ---\n", temp->nome);
             printf("Idade: %d\n", temp->idade);
             printf("CPF: %s\n", temp->CPF);
             printf("Prioridade: %s\n", temp->prioridade);
             temp = temp->prox;
-            i++;
         }
-        printf("\n-----------------------------");
     }
 }
 
-Paciente* buscarCpf(Paciente*inicio){
+Paciente* buscarCpf(Paciente*lista){
     char buscacpf[12];
 
-    printf("\n\n~~~~~~~~~ BUSCAR POR CPF ~~~~~~~~~\n\n");
+    printf("\n\n~~~~~~~~~~~~ BUSCAR POR CPF ~~~~~~~~~~~~\n\n");
     printf("Digite o CPF (11 digitos): ");
     fgets(buscacpf, 12, stdin);
     buscacpf[strcspn(buscacpf, "\n")] = 0;
 
-    if (strlen(buscacpf) != 11){
-        printf("\nERRO: O CPF deve ter 11 digitos. Busca cancelada.\n");
-    }
-
-    Paciente *temp = inicio;
+    Paciente *temp = lista;
     while (temp != NULL) {
         if (strcmp(temp->CPF, buscacpf) == 0) {
             
-            printf("\nPaciente %s:\n", temp->CPF);
+            printf("\n--- Paciente %s:\n", temp->CPF);
             printf("Nome: %s\n", temp->nome);
             printf("Idade: %d\n", temp->idade);
             printf("Prioridade: %s\n", temp->prioridade);
@@ -86,7 +84,30 @@ Paciente* buscarCpf(Paciente*inicio){
         }
         temp = temp->prox;
     }
-    
-    printf("\nPaciente %s nao encontrado, CPF não existente.\n", buscacpf);
+    printf("\n> CPF nao encontrado ou inexistente\n", buscacpf);
     return NULL;
+}
+
+void visualizarFilaSimples(Fila* f, const char* titulo) { 
+    printf("\n\n--- %s (Tamanho: %d) ---\n", titulo, f->tamanho);
+    
+    Paciente *atual = f->inicio;
+    int posicao = 1;
+    
+    while (atual != NULL) {
+        printf("[%d] Nome: %s, Idade: %d, CPF: %s\n", 
+               posicao++, atual->nome, atual->idade, atual->CPF); 
+        atual = atual->prox;
+    }
+}
+
+void visualizarFilaDupla(FilaDuplaPrioridade* fd) {
+    printf("\n~~~~~~~~~~ FILA DE ATENDIMENTO ~~~~~~~~~~\n");
+    if (fd == NULL) {
+        printf("\n> O sistema de filas nao foi inicializado.\n");
+        return;
+    }
+    
+    visualizarFilaSimples(fd->filaPrioridade, "FILA DE PRIORIDADE");
+    visualizarFilaSimples(fd->filaNormal, "FILA NORMAL");
 }
