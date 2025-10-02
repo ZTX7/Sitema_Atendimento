@@ -18,4 +18,4 @@ int listaVazia(Paciente *inicio);
 Paciente* criarNo(char nome[], int idade, char cpf[]);
 Paciente* inserirElementoComeco(Paciente *inicio, char nome[], int idade, char cpf[]);
 
- #endif
+#endif
