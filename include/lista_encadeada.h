@@ -1,17 +1,21 @@
 #ifndef LISTA_ENCADEADA_H
 #define LISTA_ENCADEADA_H
 
-typedef struct Paciente{
-	char nome[50];
-	int idade;
-	int cpf;
-	int prioridade;
-    struct Paciente* prox;
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-}Paciente;
+typedef struct paciente{
+    char nome[51];
+    int idade;
+    char CPF[12];
+    char prioridade[4];
 
-Paciente* CriarPaciente(char* nome, int idade, int cpf, int prioridade);
+    struct paciente *prox;
+} Paciente;
 
-Paciente* ListaVazia(Paciente* inicio);
+int listaVazia(Paciente *inicio);
+Paciente* criarNo(char nome[], int idade, char cpf[]);
+Paciente* inserirElementoComeco(Paciente *inicio, char nome[], int idade, char cpf[]);
 
- #endif
+#endif

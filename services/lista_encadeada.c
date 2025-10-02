@@ -1,43 +1,27 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include "../include/lista_encadeada.h"
 
-typedef struct Paciente{
-	char nome[50];
-	int idade;
-	int cpf;
-	int prioridade;
-    struct Paciente* prox;
+Paciente* criarNo(char nome[], int idade, char cpf[]){
+    Paciente* novoNo = (Paciente*)malloc(sizeof(Paciente));
 
-}Paciente;
-
-/* Usando esse o typedef, estou dando um apelido a estrutura, pois
-toda vez que eu chamar o struct, não vou mais declara-lo como um
-tipo de variavel sempre que for estruturar um novo conjunto de dados 
-(ex: struct Paciente p1;), mas sim (ex: Paciente p1;)*/
-
-
-Paciente* CriarPaciente(char* nome, int idade, int cpf, int prioridade){
-    Paciente* novoPaciente = (Paciente*)malloc(sizeof(Paciente));
-
-    int i = 0;
-    while (nome[i] != '\0' && i < 49) {
-        novoPaciente->nome[i] = nome[i];
-        i++;
-    };
-     
-    novoPaciente->nome[i] = '\0'; // Adiciona o terminador nulo no final
-
-    novoPaciente->idade = idade;
-    novoPaciente->cpf = cpf;
-    novoPaciente->prioridade = prioridade;
-    novoPaciente->prox = NULL;
-
-    return novoPaciente;
-
+    strcpy(novoNo->nome, nome);
+    novoNo->idade = idade;
+    strcpy(novoNo->CPF, cpf);
+    if (idade >= 50) {
+        strcpy(novoNo->prioridade, "Sim");
+    } else {
+        strcpy(novoNo->prioridade, "Nao");
+    }
+    
+    novoNo->prox = NULL;
+    return novoNo;
 }
 
-
-Paciente* ListaVazia(Paciente* inicio){
+int listaVazia(Paciente *inicio) {
     return inicio == NULL;
 }
 
+Paciente* inserirElementoComeco(Paciente* inicio, char nome[], int idade, char cpf[]){
+    Paciente* novoNo = criarNo(nome, idade, cpf);
+    novoNo->prox = inicio;
+    return novoNo;
+}
